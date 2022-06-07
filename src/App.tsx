@@ -1,26 +1,32 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import "./App.css";
+import InputFeild from "./components/InputFeild";
+import { TodoModel } from "./model/model";
+import TodoList from "./components/TodoList";
 
-function App() {
+// App is arrow function of type React Functional component which returns JSX element.
+const App: React.FC = () => {
+  const [todo, setTodo] = useState<string>("");
+  const [todos, setTodos] = useState<TodoModel[] | []>([]);
+
+  const addTodo = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    // Check if any task is entered and set a task with Date as id and isCompleted as false. Add newly added task to array of tasks.
+    // Clear the input box and set todo to empty string.
+    if (todo) {
+      setTodos([...todos, { id: Date.now(), todo, isCompleted: false }]);
+      setTodo("");
+    }
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <span className="heading">Taskify</span>
+      <InputFeild todo={todo} setTodo={setTodo} addTodo={addTodo}></InputFeild>
+      <TodoList todos={todos} setTodos={setTodos}></TodoList>
     </div>
   );
-}
+};
 
 export default App;
